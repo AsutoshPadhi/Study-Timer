@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+            Timer
+            </h1>
+            <h2 class="subtitle">
+            IISc Bangalore
+            </h2>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="content is-large has-text-centered is-size-1">
+            <h1 id="master-time" class="title">30:00</h1>
+            <p id="time" class="is-large">05:00</p>
+        </div>
+        <div id="controls" class="has-text-centered">
+            <button class="button is-primary is-outlined is-medium" onclick="startTimer()">Start</button>
+            <audio id="audio" src="{{ url_for('static', filename='audio/Zhada-3.mp3') }}" autostart="false" ></audio>
+            <audio id="audio-intermediate" src="{{ url_for('static', filename='audio/Intermediate.mp3') }}" autostart="false" ></audio>
+            <button class="button is-danger is-outlined is-medium" style="margin-left:1em;" onclick="stopTimer()">Stop</button>
+        </div>
+    </div>
+</section>
+
+<style>
+    audio{
+        display: none;
+    }
+</style>
+
+<script>
+    function startTimer(duration, display) 
+    {
+        PlaySound();
+        startMaster();
+        var duration = 60 * 5,
+            display = $('#time');
+        var timer = duration, minutes, seconds;
+        var interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+    
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+            display.text(minutes + ":" + seconds);
+    
+            if (--timer < 0) {
+                timer = duration;
+                PlayIntermediate();
+            }
+        }, 1000);
+    }
+
+    function startMaster()
+    {
+        var duration = 60 * 30,
+            display = $('#master-time');
+        var timer = duration, minutes, seconds;
+        var interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+    
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+            display.text(minutes + ":" + seconds);
+    
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    function stopTimer()
+    {
+        console.log("Stop");
+        clearInterval(interval);
+    }
+    
+    function PlaySound() {
+        
+        var sound = document.getElementById("audio");
+        sound.play()
+    }
+
+    function PlayIntermediate() {
+        
+        var sound = document.getElementById("audio-intermediate");
+        sound.play()
+    }
+</script>
+
+{% endblock %}
