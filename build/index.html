@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    
+    <!-- Bulma -->
+    <link rel="stylesheet" href="../static/dependencies/css/sass/changes.scss">
+    <link rel="stylesheet" href="../static/dependencies/css/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="../static/dependencies/css/bulma/css/bulma.css.map">
+    <!-- <link rel="stylesheet" href="../static/dependencies/css/fontawesome/fontawesome.css"> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+    <title>Timer</title>
+    <style type="text/css">
+      body { background: #fafafa !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+   </style>
+
+  </head>
+  <body>
+
+    <script
+			  src="../static/dependencies/js/jquery-3.3.1.js"
+			  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+			  crossorigin="anonymous"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <script src="../static/dependencies/js/socket.io.js"></script>
+
+    
+
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+            CVML
+            </h1> 
+            <!-- <h2 class="subtitle">
+            CVML
+            </h2> -->
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="content is-large has-text-centered is-size-1">
+            <h1 id="master-time" class="title">30:00</h1>
+            <p id="time" class="is-large">05:00</p>
+        </div>
+        <div id="controls" class="has-text-centered">
+            <button class="button is-primary is-outlined is-medium" onclick="startTimer()">Start</button>
+            <audio id="audio" src="/static/audio/Zhada-3.mp3" autostart="false" ></audio>
+            <audio id="audio-intermediate" src="/static/audio/Intermediate.mp3" autostart="false" ></audio>
+            <button class="button is-danger is-outlined is-medium" style="margin-left:1em;" onclick="stopTimer()">Stop</button>
+        </div>
+        <br><br>
+        <div id="settings" class="buttons is-right">
+            <a class="button" style="border:none;">
+                <span class="icon is-large has-text-success">
+                    <i class="fas fa-3x fa-cog"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    audio{
+        display: none;
+    }
+</style>
+
+<script>
+    function startTimer(duration, display) 
+    {
+        PlaySound();
+        startMaster();
+        var duration = (60 * 5)-1,
+            display = $('#time');
+        var timer = duration, minutes, seconds;
+        var interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+    
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+            display.text(minutes + ":" + seconds);
+    
+            if (--timer < 0) {
+                timer = duration;
+                PlayIntermediate();
+            }
+        }, 1000);
+    }
+
+    function startMaster()
+    {
+        var duration = (60 * 30)-1,
+            display = $('#master-time');
+        var timer = duration, minutes, seconds;
+        var interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+    
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+            display.text(minutes + ":" + seconds);
+    
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    function stopTimer()
+    {
+        console.log("Stop");
+        clearInterval(interval);
+    }
+    
+    function PlaySound() {
+        
+        var sound = document.getElementById("audio");
+        sound.play()
+    }
+
+    function PlayIntermediate() {
+        
+        var sound = document.getElementById("audio-intermediate");
+        sound.play()
+    }
+</script>
+
+
+  </body>
+</html>
